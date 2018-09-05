@@ -14,21 +14,17 @@ if [[ $paramscount > 0 ]]; then
         	echo "config file has updated"
 	else
         	echo "something went wrong in config file update."
+		exit 1
 	fi
 fi
 
+#changing the ownership
 sudo chown testuser:testuser -R /home/testuser/mycode
 
-if [[ $? ]]; then
-
-	echo "changed all files owner to testuser"
-else
-	echo "something went wrong in change the ownership."
-fi
-
+#creating the tar file
 tar --exclude=/home/testuser/mycode/.git -czf /home/testuser/mycode.tar.gz *.*
 
-echo "tar file has created successfully."
+echo "tar file has been created successfully."
 
 scp /home/testuser/mycode.tar.gz testuser@18.207.216.131:/home/testuser/
 
@@ -49,4 +45,5 @@ if [[ $status > 0 ]]; then
 	echo "Site up and running with status code 200"
 else 
 	echo "Something went wrong to access the site."
+	exit 1
 fi
